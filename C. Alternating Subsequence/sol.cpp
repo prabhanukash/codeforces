@@ -88,27 +88,30 @@ int main()
 } 
 int solve()
 {
-	ll t;
-    cin>>t;
-    while(t--)
-    {
-        ll n;
-        cin>>n;
-        ll a[n];
-        in(a,n);
-		ll sum=0,maxi=INT_MIN;
-		fr(i,0,n)
-		{
-			maxi=max(maxi,a[i]);
-			if(a[i]*a[i+1]<0 && i!=n-1)
-			{
-				sum+=maxi;
-				maxi=INT_MIN;
-			}
-		}
-		//if(maxi!=INT_MIN) 
-		sum+=maxi;
-		cout<<sum<<'\n';
-	}	
+	ll n,k;
+	cin>>n>>k;
+	ll a[n];
+	in(a,n);
+	mapll m;
+	ll pref[2*k+2];
+	mset(pref,0);
+	fr(i,0,n/2)
+	{
+		ll maxi=max(a[i],a[n-i-1])+k;
+		ll mini=min(a[i],a[n-i-1])+1;
+		m[a[i]+a[n-1-i]]++;
+		pref[maxi+1]--;
+		pref[mini]++;
+	}
+	for(ll i=1;i<(2*k)+2;i++)pref[i]+=pref[i-1];
+	ll ans=1e9;
+	for(ll i=2;i<=2*k;i++)
+	{
+		ll ze=m[i];
+		ll on=pref[i]-ze;
+		ll tw=n/2-on-ze;
+		ans=min(ans,on*1+tw*2);
+	}
+	cout<<ans<<'\n';
   return 0;
 }  
